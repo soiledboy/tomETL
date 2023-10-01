@@ -1,0 +1,137 @@
+schema {
+	query: Query,
+	mutation: Mutation
+}
+
+type Card {
+	name: String!
+}
+
+type Cards {
+	cards: [Card!]
+}
+
+type CardStatistic {
+	name: String!,
+	value: Float!
+}
+
+type TopBottomCards {
+	name: String, 
+	timePeriod: String,
+	count: Int,
+	cards: [CardStatistic],
+	errors: [String]
+}
+
+type Price {
+	mid: Float!,
+	date: String!
+}
+
+type CardWithPrices {
+	name: String!,
+	prices: [Price!]
+}
+
+type CardResult {
+	success: Boolean,
+	error: String,
+	card: Card!
+}
+
+type CardWithPricesResult {
+	success: Boolean!,
+	errors: [String!],
+	card: CardWithPrices!
+}
+
+type DailyPrice {
+	cards_name: String!
+}
+
+type DailyPriceResult {
+	success: Boolean!,
+	errors: [String!],
+	dailyPrice: DailyPrice!
+}
+
+type DailyPricesResult {
+	success: Boolean!,
+	errors: [String!],
+	dailyPrices: [DailyPrice!]
+}
+
+type MarketValue {
+	date: String!,
+	value: Float!
+}
+
+type DateTimeDataPoint {
+	date: String!,
+	value: Float!
+}
+
+type TimeSeries {
+	id: ID,
+	name: String!,
+	timePeriod: String,
+	values: [DateTimeDataPoint!]!
+}
+
+type TimeSeriesCollection {
+	collection: [TimeSeries]!
+}
+
+type Index {
+	id: ID!,
+	name: String!,
+}
+
+type IndexesResult {
+	indexes: [Index]!,
+	success: Boolean!,
+	errors: [String]
+}
+
+type DateValue {
+	date: String,
+	value:  Float
+}
+
+type CardSetPrices {
+	id: ID,
+	name: String,
+	setSku: String,
+	dateValues: [DateValue]
+}
+
+type CardSetsPricesResult {
+	success: Boolean!,
+	errors: [String],
+	cardSets: [CardSetPrices],
+}
+
+################# queries
+
+type Query  {
+	cardById(id: Int!): CardResult!,
+	cardByName(name: String): CardResult!,
+	cardByNameWithPrices(name: String!, duration: Int): CardWithPricesResult!,
+	cardsAll: Cards!,
+	timeSeries(name: String!, timePeriod: String): TimeSeries,
+	
+	timeSeriesCollection(names: [String!]!, timePeriod: String): TimeSeriesCollection,
+	timeSeriesCollectionByIds(ids: [ID!]!, timePeriod: String): TimeSeriesCollection,
+
+	topGainers(timePeriod: String, count: Int): TopBottomCards,
+	topLosers(timePeriod: String, count: Int): TopBottomCards,
+	indexes(name: String): IndexesResult!,
+	cardSetPricesByIds(ids: [String], timePeriod: String): CardSetsPricesResult
+}
+
+################# mutation
+
+type Mutation {
+	someThing: String!
+}
